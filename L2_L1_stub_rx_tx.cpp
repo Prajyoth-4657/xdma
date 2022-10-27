@@ -42,32 +42,32 @@ void printbuf_s(int size) {
 
 static volatile int run = 1;
 void sigint_handler(int sig_num) {
-	signal(SIGQUIT, sigint_handler);
+	signal(SIGQUIT, sigint_handler); // handle signal interrupts, didn't find sigquit 
 	run = 0;
 	printf("stopping after next rd-wr cycle\n");
-	fflush(stdout);
+	fflush(stdout); // will basically write any unwritten data
 }
 
 int main() {
 	cpu_set_t mask;
 	CPU_ZERO(&mask);
-	CPU_SET(3, &mask);
-	int result = sched_setaffinity(0, sizeof(mask), &mask);
+	CPU_SET(3, &mask); // run on the cpu core 3
+	int result = sched_setaffinity(0, sizeof(mask), &mask); 
 	long nproc = sysconf(_SC_NPROCESSORS_ONLN);
-	printf("Active CPUs: ");
+	printf("Active CPUs: "); // print what are the active cpus
 	for (int i=0;i<nproc;i++) 
 	  	printf("%d ", CPU_ISSET(i, &mask));
 	printf("\n");
 
-	rx_ptr = (uint8_t*) malloc((RX_SIZE_MAX+ALIGNMENT));
-	tx_ptr = (uint8_t*) malloc((TX_SIZE_MAX+ALIGNMENT));
+	rx_ptr = (uint8_t*) malloc((RX_SIZE_MAX+ALIGNMENT)); // reciever pointer allocation in cpu
+	tx_ptr = (uint8_t*) malloc((TX_SIZE_MAX+ALIGNMENT)); // What is alignment?
 	slot_ptr = (uint8_t*) malloc((SLOT_SIZE_MAX+ALIGNMENT));
-	memset(tx_ptr, 0x00, TX_SIZE_MAX + ALIGNMENT);
+	memset(tx_ptr, 0x00, TX_SIZE_MAX + ALIGNMENT); // initialise the values by 0
 	memset(rx_ptr, 0x00, RX_SIZE_MAX + ALIGNMENT);
 	memset(slot_ptr, 0x00, SLOT_SIZE_MAX + ALIGNMENT);
 
-	file_fd_1 = open("ul_data_out_txt.bin", O_WRONLY | O_TRUNC);
- 	assert(file_fd_1>=0);
+	file_fd_1 = open("ul_data_out_txt.bin", O_WRONLY | O_TRUNC); // open file with write only and truncate only mode
+ 	assert(file_fd_1>=0); // check if file is succusfully opened
 
 	int rc, wc,rc1,wc1;
 	uint32_t read_len;
