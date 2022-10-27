@@ -81,10 +81,12 @@ int main() {
   
     /********************** Starting the read func**************/
     rc = read(fp, tx_ptr, tx_len);
+    
+    clock_gettime(CLOCK_REALTIME, &nowTime);
     wc = write(fpga_w_fd, tx_ptr, tx_len);
       
     rc = read(fpga_r_fd,rx_ptr,rx_len);
-                         
+    clock_gettime(CLOCK_REALTIME, &nowTime);       
     printf("%d", compareArrays(rx_ptr, tx_ptr, tx_len));
 }
     
