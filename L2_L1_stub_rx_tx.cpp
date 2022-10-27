@@ -30,7 +30,7 @@ void crash(int loc_no) {
 
 void printbuf(int size) {
 	for (int i=0; i<size; i++) {
-		printf("%x ", rx_ptr[i]);
+		printf("%x ", rx_ptr[i]); # this prints a hexadecimal number
 	}
 }
 
