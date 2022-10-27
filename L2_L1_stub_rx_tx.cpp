@@ -114,6 +114,7 @@ int main() {
 		memset(ul_ptr[slot_id], 0x00, (c+ALIGNMENT) );
 		
 		/*************DL_TTI msgID,msgLen,msgSLOT ************/
+	    // reading from fp byte by byte and writing to arr_ptr
 		ret = fread(arr_ptr[slot_id],sizeof(uint8_t),1,fp);			//#0B Phy api msgs
 		slot_start_arr_ptr = (uint8_t*)(arr_ptr[slot_id]);
 		dl_init_hdr = *((uint8_t*)slot_start_arr_ptr);
@@ -190,7 +191,7 @@ int main() {
 	}
 	printf("\n");
 
-	wc = write(fpga_w_fd, tx_ptr, HEADER_LEN);
+	wc = write(fpga_w_fd, tx_ptr, HEADER_LEN); // ?
 	printf("written PARAM req.\n");
 	printf("bytes tx:%d\n", wc);
 	/************1st read from FPGA ********/
@@ -211,7 +212,7 @@ int main() {
 	printbuf(HEADER_LEN);
 	int rx_len = read_len+8;
 	printf("\nnew read len:%d\n",rx_len);
-	/************2nd read from FPGA ********/
+	/************2nd read from FPGA ********/ // what is 2nd read?
  	rc = read(fpga_r_fd,rx_ptr,rx_len);
 	printf("2nd read:%d\n",rc);
 	// ***********Writing FPGA data to file *******
